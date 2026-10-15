@@ -6,6 +6,13 @@ import {
 } from "@/lib/admin-auth";
 
 export async function POST(request: Request) {
+  if (!process.env.ADMIN_PASSWORD || !process.env.ADMIN_SESSION_SECRET) {
+    return NextResponse.json(
+      { message: "El acceso administrativo aún no está configurado." },
+      { status: 503 },
+    );
+  }
+
   const body = (await request.json().catch(() => null)) as
     | { password?: string }
     | null;
@@ -36,4 +43,3 @@ export async function POST(request: Request) {
 
   return response;
 }
-
